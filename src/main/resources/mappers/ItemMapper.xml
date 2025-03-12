@@ -13,14 +13,49 @@
         <result property="tarifaDia" column="i_tarifaxdia"/>
         <result property="formatoRenta" column="i_formatorenta"/>
         <result property="genero" column="i_genero"/>
+        <association property="tipoItem" resultMap="TipoItemResult" columnPrefix="ti_"/>
     </resultMap>
 
-    <select id="consultarItems" resultMap="ItemResult">
-        SELECT id AS i_id, nombre AS i_nombre, descripcion AS i_descripcion,
-               fechalanzamiento AS i_fechalanzamiento, tarifaxdia AS i_tarifaxdia,
-               formatorenta AS i_formatorenta, genero AS i_genero
-        FROM VI_ITEMS
+
+
+    <select id="consultarItem" resultMap="ItemResult" parameterType="map">
+        SELECT
+            i.id AS i_id,
+            i.nombre AS i_nombre,
+            i.descripcion AS i_descripcion,
+            i.fechalanzamiento AS i_fechalanzamiento,
+            i.tarifaxdia AS i_tarifaxdia,
+            i.formatorenta AS i_formatorenta,
+            i.genero AS i_genero,
+            ti.id AS ti_id,
+            ti.descripcion AS ti_descripcion
+        FROM VI_ITEMS i
+                 LEFT JOIN VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id
+        WHERE i.id = #{idItem}
     </select>
+    
+    <select id="consultarItems" resultMap="ItemResult">
+        SELECT
+            i.id AS i_id,
+            i.nombre AS i_nombre,
+            i.descripcion AS i_descripcion,
+            i.fechalanzamiento AS i_fechalanzamiento,
+            i.tarifaxdia AS i_tarifaxdia,
+            i.formatorenta AS i_formatorenta,
+            i.genero AS i_genero,
+            ti.id AS ti_id,
+            ti.descripcion AS ti_descripcion
+        FROM VI_ITEMS i
+                 LEFT JOIN VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id
+    </select>
+
+
+
+    <insert id="insertarItem" parameterType="map">
+        INSERT INTO VI_ITEMS (id, nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id)
+        VALUES (#{item.id}, #{item.nombre}, #{item.descripcion}, #{item.fechaLanzamiento}, #{item.tarifaDia}, #{item.formatoRenta}, #{item.genero}, #{item.tipoItem.id})
+    </insert>
+
 
     <select id="consultarItemPorId" parameterType="int" resultMap="ItemResult">
         SELECT * FROM VI_ITEMS WHERE id = #{id}
