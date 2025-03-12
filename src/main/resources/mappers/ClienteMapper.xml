@@ -22,7 +22,7 @@
     </resultMap>
 
     <resultMap id="VI_ITEMRENTADO" type="sample.entities.ItemRentado">
-        <id property="id" column="ir.id"/>
+        <id property="id" column="ir_id"/>
         <result property="fechaInicioRenta" column="ir_fechainiciorenta"/>
         <result property="fechaFinRenta" column="ir_fechafinrenta"/>
         <association property="item" resultMap="ItemResult" columnPrefix="i_"/>
@@ -35,13 +35,13 @@
         <result property="direccion" column="c_direccion"/>
         <result property="email" column="c_email"/>
         <result property="vetado" column="c_vetado"/>
-        <collection property="itemsRentados" ofType="ItemRentado" resultMap="ItemRentadoResult" columnPrefix="ir_"/>
+        <collection property="itemsRentados" ofType="ItemRentado" resultMap="VI_ITEMRENTADO" columnPrefix="ir_"/>
     </resultMap>
 
     <select id="consultarClientes" resultMap="ClienteResult">
         SELECT
-            c.nombre AS c_nombre,
             c.documento AS c_documento,
+            c.nombre AS c_nombre,
             c.telefono AS c_telefono,
             c.direccion AS c_direccion,
             c.email AS c_email,
@@ -58,11 +58,10 @@
             i.genero AS i_genero,
             ti.id AS ti_id,
             ti.descripcion AS ti_descripcion
-        FROM VI_CLIENTES AS c
-                 LEFT JOIN VI_ITEMRENTADO AS ir ON c.documento = ir.CLIENTES_documento
-                 LEFT JOIN VI_ITEMS AS i ON ir.ITEMS_id = i.id
-                 LEFT JOIN VI_TIPOITEM AS ti ON i.TIPOITEM_id = ti.id
+        FROM VI_CLIENTES c
+                 LEFT JOIN VI_ITEMRENTADO ir ON c.documento = ir.CLIENTES_documento
+                 LEFT JOIN VI_ITEMS i ON ir.ITEMS_id = i.id
+                 LEFT JOIN VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id
     </select>
-
-
+    
 </mapper>

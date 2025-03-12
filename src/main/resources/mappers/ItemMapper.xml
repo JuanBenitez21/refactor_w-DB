@@ -5,7 +5,25 @@
   
 <mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper">
 
+    <resultMap id="ItemResult" type="Item">
+        <id property="id" column="i_id"/>
+        <result property="nombre" column="i_nombre"/>
+        <result property="descripcion" column="i_descripcion"/>
+        <result property="fechaLanzamiento" column="i_fechalanzamiento"/>
+        <result property="tarifaDia" column="i_tarifaxdia"/>
+        <result property="formatoRenta" column="i_formatorenta"/>
+        <result property="genero" column="i_genero"/>
+    </resultMap>
 
-    
-    
+    <select id="consultarItems" resultMap="ItemResult">
+        SELECT id AS i_id, nombre AS i_nombre, descripcion AS i_descripcion,
+               fechalanzamiento AS i_fechalanzamiento, tarifaxdia AS i_tarifaxdia,
+               formatorenta AS i_formatorenta, genero AS i_genero
+        FROM VI_ITEMS
+    </select>
+
+    <select id="consultarItemPorId" parameterType="int" resultMap="ItemResult">
+        SELECT * FROM VI_ITEMS WHERE id = #{id}
+    </select>
+
 </mapper>
